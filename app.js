@@ -117,6 +117,26 @@ function buildDateOptions() {
     opt.textContent = d + (i === 0 ? ' (最新)' : '');
     sel.appendChild(opt);
   });
+
+  // 原始榜日期选项（目前只有今天，后续可以扩展）
+  const rawSel = document.getElementById('raw-date-select');
+  if (rawSel && rawProjects.length > 0) {
+    const today = rawProjects[0]?.date || new Date().toISOString().split('T')[0];
+    const opt = document.createElement('option');
+    opt.value = today;
+    opt.textContent = today + ' (最新)';
+    rawSel.appendChild(opt);
+  }
+}
+
+// ===== 按日期加载原始榜数据 =====
+async function loadRawDataByDate(date) {
+  // 目前只支持今天，后续可以扩展为加载历史数据
+  if (date === rawProjects[0]?.date) {
+    renderRawList();
+  } else {
+    alert('历史原始榜单数据暂未保存，仅支持查看最新数据');
+  }
 }
 
 // ===== 渲染 Top 3 =====
@@ -514,11 +534,13 @@ function openModal(projectId) {
   `;
   
   document.getElementById('modal-overlay').classList.add('open');
+  document.body.classList.add('modal-open');
 }
 
 // ===== 关闭弹窗 =====
 function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
+  document.body.classList.remove('modal-open');
 }
 
 // ===== 绑定事件 =====
@@ -529,14 +551,14 @@ function bindEvents() {
     currentPageNum = 1;
     renderHistory();
   });
-  
+
   // 排序
   document.getElementById('sort-select').addEventListener('change', e => {
     const [key, dir] = e.target.value.split('_');
     currentSort = { key, dir };
     renderHistory();
   });
-  
+
   // 表头排序
   document.querySelectorAll('.sortable').forEach(th => {
     th.addEventListener('click', () => {
@@ -549,7 +571,7 @@ function bindEvents() {
       renderHistory();
     });
   });
-  
+
   // 赛道筛选
   document.querySelectorAll('.track-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -560,16 +582,35 @@ function bindEvents() {
       renderHistory();
     });
   });
-  
+
   // 日期选择
   document.getElementById('top3-date').addEventListener('change', e => {
     renderTop3(e.target.value);
   });
-  
+
+  // 原始榜日期选择
+  const rawDateSelect = document.getElementById('raw-date-select');
+  if (rawDateSelect) {
+    rawDateSelect.addEventListener('change', e => {
+      loadRawDataByDate(e.target.value);
+    });
+  }
+
   // ESC 关闭弹窗
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeModal();
   });
+
+  // 阻止弹窗滚动穿透
+  const modal = document.querySelector('.modal');
+  if (modal) {
+    modal.addEventListener('wheel', e => {
+      e.stopPropagation();
+    }, { passive: true });
+    modal.addEventListener('touchmove', e => {
+      e.stopPropagation();
+    }, { passive: true });
+  }
 }
 
 // ===== 工具函数 =====
