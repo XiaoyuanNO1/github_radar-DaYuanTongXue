@@ -316,7 +316,6 @@ function renderRawList() {
             ${p.topics.map(t => `<span class="topic-tag">${escapeHtml(t)}</span>`).join('')}
           </div>
         ` : ''}
-        <div class="raw-click-hint">👆 点击查看详情</div>
       </div>
     </div>
   `).join('');
@@ -341,34 +340,28 @@ function openRawModal(rank) {
     </div>
     <div class="modal-date">📅 ${p.date} · 📦 ${p.language || 'Unknown'}</div>
     
-    <div class="modal-category" style="margin: 16px 0; padding: 8px 16px; background: var(--accent-bg); border-radius: var(--radius); color: var(--accent); font-weight: 500;">
-      ${escapeHtml(p.category || '开发工具')}
+    <div class="modal-section">
+      <h4 class="modal-section-title">📝 项目描述</h4>
+      <div class="modal-section-content">${escapeHtml(p.detailed_description || p.description).replace(/\n/g, '<br>')}</div>
     </div>
     
-    <div class="modal-desc">
-      <h4>📝 项目介绍</h4>
-      <p style="white-space: pre-line;">${escapeHtml(p.detailed_description || p.description)}</p>
+    <div class="modal-section">
+      <h4 class="modal-section-title">🎯 使用场景</h4>
+      <div class="modal-section-content">${escapeHtml(p.usage || '适合有特定需求的开发者使用')}</div>
     </div>
     
-    ${p.metaphor ? `
-    <div class="modal-metaphor" style="background: var(--gold-bg); padding: 16px; border-radius: var(--radius); margin: 16px 0; border-left: 4px solid var(--gold);">
-      <h4 style="color: var(--gold); margin-bottom: 8px;">💡 通俗理解</h4>
-      <p style="color: var(--text-primary); margin: 0;">${escapeHtml(p.metaphor)}</p>
+    <div class="modal-section metaphor-section">
+      <h4 class="modal-section-title">💡 通俗理解</h4>
+      <div class="modal-section-content">${escapeHtml(p.metaphor || '一个实用的开源项目')}</div>
     </div>
-    ` : ''}
-    
-    ${p.usage ? `
-    <div class="modal-usage" style="margin: 16px 0;">
-      <h4>🎯 适合谁用</h4>
-      <p>${escapeHtml(p.usage)}</p>
-    </div>
-    ` : ''}
     
     ${p.topics && p.topics.length ? `
-    <div class="modal-topics" style="margin: 16px 0;">
-      <h4>🏷️ 相关标签</h4>
-      <div class="raw-topics" style="margin-top: 8px;">
-        ${p.topics.map(t => `<span class="topic-tag">${escapeHtml(t)}</span>`).join('')}
+    <div class="modal-section">
+      <h4 class="modal-section-title">🏷️ 相关标签</h4>
+      <div class="modal-section-content">
+        <div class="raw-topics">
+          ${p.topics.map(t => `<span class="topic-tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
       </div>
     </div>
     ` : ''}
@@ -435,11 +428,12 @@ function renderPagination(totalPages, currentPage, containerId, onPageChange) {
   });
 }
 
-// ===== 打开详情弹窗 =====
+// ===== 打开黑马榜详情弹窗 =====
 function openModal(projectId) {
   const p = allProjects.find(x => x.id === projectId);
   if (!p) return;
   
+  const s = p.scores;
   const content = document.getElementById('modal-content');
   content.innerHTML = `
     <div class="modal-header">
@@ -447,43 +441,73 @@ function openModal(projectId) {
       <div class="modal-stars">⭐ ${p.stars || 0} stars</div>
     </div>
     <div class="modal-date">📅 ${p.date} · ${p.is_top ? '🏆 今日精选' : ''}</div>
-    <div class="modal-desc">
-      <h4>项目描述</h4>
-      <p>${escapeHtml(p.description)}</p>
+    
+    <div class="modal-section">
+      <h4 class="modal-section-title">📝 项目描述</h4>
+      <div class="modal-section-content">${escapeHtml(p.description).replace(/\n/g, '<br>')}</div>
     </div>
-    <div class="modal-metaphor">
-      <h4>💡 通俗理解</h4>
-      <p>${escapeHtml(p.metaphor)}</p>
+    
+    <div class="modal-section">
+      <h4 class="modal-section-title">🎯 使用场景</h4>
+      <div class="modal-section-content">${escapeHtml(p.score_reasons.usage || '适合有特定需求的开发者使用')}</div>
     </div>
-    <div class="modal-scores">
-      <h4>📊 评分详情</h4>
-      <div class="score-grid">
-        <div class="score-card">
-          <span class="score-label">Vibecoding 难度</span>
-          <span class="score-value">${p.scores.vibecoding_ease}/3</span>
-          <p class="score-reason">${escapeHtml(p.score_reasons.vibecoding_ease)}</p>
+    
+    <div class="modal-section metaphor-section">
+      <h4 class="modal-section-title">💡 通俗理解</h4>
+      <div class="modal-section-content">${escapeHtml(p.metaphor)}</div>
+    </div>
+    
+    <div class="modal-section scores-section">
+      <h4 class="modal-section-title">📊 评分详情及依据</h4>
+      <div class="modal-scores-list">
+        <div class="modal-score-item">
+          <div class="modal-score-header">
+            <span class="modal-score-name">Vibecoding 难度</span>
+            <span class="modal-score-value">${s.vibecoding_ease}/3</span>
+          </div>
+          <div class="modal-score-bar-wrap">
+            <div class="modal-score-bar"><div class="modal-score-fill vibe" style="width:${(s.vibecoding_ease/3)*100}%"></div></div>
+          </div>
+          <p class="modal-score-reason">${escapeHtml(p.score_reasons.vibecoding_ease)}</p>
         </div>
-        <div class="score-card">
-          <span class="score-label">逻辑护城河</span>
-          <span class="score-value">${p.scores.logic_moat}/2</span>
-          <p class="score-reason">${escapeHtml(p.score_reasons.logic_moat)}</p>
+        <div class="modal-score-item">
+          <div class="modal-score-header">
+            <span class="modal-score-name">逻辑护城河</span>
+            <span class="modal-score-value">${s.logic_moat}/2</span>
+          </div>
+          <div class="modal-score-bar-wrap">
+            <div class="modal-score-bar"><div class="modal-score-fill moat" style="width:${(s.logic_moat/2)*100}%"></div></div>
+          </div>
+          <p class="modal-score-reason">${escapeHtml(p.score_reasons.logic_moat)}</p>
         </div>
-        <div class="score-card">
-          <span class="score-label">赛道匹配度</span>
-          <span class="score-value">${p.scores.track_fit}/2</span>
-          <p class="score-reason">${escapeHtml(p.score_reasons.track_fit)}</p>
+        <div class="modal-score-item">
+          <div class="modal-score-header">
+            <span class="modal-score-name">赛道匹配度</span>
+            <span class="modal-score-value">${s.track_fit}/2</span>
+          </div>
+          <div class="modal-score-bar-wrap">
+            <div class="modal-score-bar"><div class="modal-score-fill track" style="width:${(s.track_fit/2)*100}%"></div></div>
+          </div>
+          <p class="modal-score-reason">${escapeHtml(p.score_reasons.track_fit)}</p>
         </div>
-        <div class="score-card">
-          <span class="score-label">增长潜力</span>
-          <span class="score-value">${p.scores.growth_potential}/2</span>
-          <p class="score-reason">${escapeHtml(p.score_reasons.growth_potential)}</p>
+        <div class="modal-score-item">
+          <div class="modal-score-header">
+            <span class="modal-score-name">增长潜力</span>
+            <span class="modal-score-value">${s.growth_potential}/2</span>
+          </div>
+          <div class="modal-score-bar-wrap">
+            <div class="modal-score-bar"><div class="modal-score-fill growth" style="width:${(s.growth_potential/2)*100}%"></div></div>
+          </div>
+          <p class="modal-score-reason">${escapeHtml(p.score_reasons.growth_potential)}</p>
         </div>
       </div>
-      <div class="score-total-box">
-        <span>总分</span>
-        <strong>${p.scores.total}/12</strong>
+      <div class="modal-total-score">
+        <span class="total-label">总分</span>
+        <span class="total-value">${s.total}</span>
+        <span class="total-denom">/12</span>
       </div>
     </div>
+    
     <div class="modal-actions">
       <a href="${p.url}" target="_blank" class="btn-primary">🔗 访问 GitHub</a>
     </div>

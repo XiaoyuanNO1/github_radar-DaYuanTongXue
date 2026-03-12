@@ -119,7 +119,7 @@ def generate_detailed_description(repo_data: Dict, readme: str) -> tuple:
     
     detailed_desc += f"\n\n🎯 使用场景：{usage}"
     
-    return detailed_desc, metaphor
+    return detailed_desc, metaphor, usage
 
 def analyze_with_ai(repo_data: Dict, readme: str) -> Dict:
     """
@@ -187,8 +187,8 @@ def analyze_with_ai(repo_data: Dict, readme: str) -> Dict:
     
     total = sum(scores.values())
     
-    # 生成详细描述和比喻
-    detailed_desc, metaphor = generate_detailed_description(repo_data, readme)
+    # 生成详细描述、比喻和使用场景
+    detailed_desc, metaphor, usage = generate_detailed_description(repo_data, readme)
     
     # 赛道评分理由
     if matched_tracks:
@@ -207,7 +207,8 @@ def analyze_with_ai(repo_data: Dict, readme: str) -> Dict:
             "vibecoding_ease": "纯提示词/简单逻辑可复刻" if vibecoding_ease == 3 else ("需要一定架构理解" if vibecoding_ease == 2 else "底层系统复杂，难复刻"),
             "logic_moat": "有独特算法或深度业务逻辑" if logic_moat == 2 else ("有一定设计深度" if logic_moat == 1 else "简单 API 串联"),
             "track_fit": track_fit_reason,
-            "growth_potential": "热点赛道，易传播变现" if growth_potential == 2 else "有一定传播潜力"
+            "growth_potential": "热点赛道，易传播变现" if growth_potential == 2 else "有一定传播潜力",
+            "usage": usage
         }
     }
 
