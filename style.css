@@ -1580,12 +1580,13 @@ body.modal-open {
 
 .modal-col-right {
   background: var(--bg);
-  padding: 16px;
+  padding: 20px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
 }
 
 .modal-col-right h4 {
@@ -1632,20 +1633,21 @@ body.modal-open {
 .scores-vertical-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   flex: 1;
-  justify-content: space-between;
+  overflow: hidden;
 }
 
 .score-row {
   background: var(--bg-card);
-  padding: 14px;
+  padding: 12px 14px;
   border-radius: 8px;
   border: 1px solid var(--border);
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 0;
 }
 
 .score-row-header {
@@ -1668,17 +1670,20 @@ body.modal-open {
 }
 
 .score-progress-bar {
-  height: 6px;
+  height: 8px;
   background: var(--border);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 8px;
+  border-radius: 4px;
+  overflow: visible;
+  margin-bottom: 10px;
+  position: relative;
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: width 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .progress-fill.vibe { background: linear-gradient(90deg, #58a6ff, #79c0ff); }
@@ -1691,6 +1696,11 @@ body.modal-open {
   color: var(--text-secondary);
   margin: 0;
   line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 /* Compact actions */
