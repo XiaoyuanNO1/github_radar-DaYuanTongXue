@@ -1561,33 +1561,40 @@ body.modal-open {
   font-size: 12px;
 }
 
-/* Two column layout */
+/* Two column layout - fixed height */
 .modal-body-two-col {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 20px;
   padding: 16px 20px;
+  height: calc(600px - 120px);
+  overflow: hidden;
 }
 
 .modal-col-left {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  overflow-y: auto;
 }
 
 .modal-col-right {
   background: var(--bg);
-  padding: 12px;
+  padding: 16px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .modal-col-right h4 {
   font-size: 12px;
   color: var(--text-secondary);
-  margin: 0 0 10px 0;
+  margin: 0 0 12px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .modal-block {
@@ -1621,64 +1628,69 @@ body.modal-open {
   color: var(--gold);
 }
 
-/* 2x2 Scores Grid */
-.scores-grid-2x2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+/* Vertical Scores List - fills right column */
+.scores-vertical-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  justify-content: space-between;
 }
 
-.score-box {
-  padding: 8px;
+.score-row {
   background: var(--bg-card);
-  border-radius: 6px;
+  padding: 14px;
+  border-radius: 8px;
   border: 1px solid var(--border);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.score-box-header {
+.score-row-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
-.score-box-header span {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.score-box-header strong {
+.score-name {
   font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.score-value {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--accent);
 }
 
-.score-micro-bar {
-  height: 3px;
+.score-progress-bar {
+  height: 6px;
   background: var(--border);
-  border-radius: 2px;
+  border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
-.score-micro-bar .fill {
+.progress-fill {
   height: 100%;
-  border-radius: 2px;
+  border-radius: 3px;
+  transition: width 0.3s ease;
 }
 
-.score-micro-bar .fill.vibe { background: #58a6ff; }
-.score-micro-bar .fill.moat { background: #bc8cff; }
-.score-micro-bar .fill.track { background: #3fb950; }
-.score-micro-bar .fill.growth { background: #f0883e; }
+.progress-fill.vibe { background: linear-gradient(90deg, #58a6ff, #79c0ff); }
+.progress-fill.moat { background: linear-gradient(90deg, #bc8cff, #d4b5ff); }
+.progress-fill.track { background: linear-gradient(90deg, #3fb950, #56d364); }
+.progress-fill.growth { background: linear-gradient(90deg, #f0883e, #ffa657); }
 
-.score-reason-mini {
-  font-size: 10px;
+.score-reason-text {
+  font-size: 11px;
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  line-height: 1.4;
 }
 
 /* Compact actions */
@@ -1694,10 +1706,12 @@ body.modal-open {
   font-size: 13px;
 }
 
-/* Modal size adjustment for compact view */
+/* Fixed modal size */
 .modal {
-  max-width: 900px;
-  max-height: 80vh;
+  width: 900px;
+  height: 600px;
+  max-width: 95vw;
+  max-height: 90vh;
 }
 
 .modal-content {

@@ -492,44 +492,44 @@ function openModal(projectId) {
         </div>
       </div>
 
-      <!-- 右栏：评分（2x2紧凑网格） -->
+      <!-- 右栏：评分（竖排填满） -->
       <div class="modal-col-right">
         <h4>📊 评分详情</h4>
-        <div class="scores-grid-2x2">
-          <div class="score-box">
-            <div class="score-box-header">
-              <span>Vibecoding</span>
-              <strong>${s.vibecoding_ease}/3</strong>
+        <div class="scores-vertical-list">
+          <div class="score-row">
+            <div class="score-row-header">
+              <span class="score-name">Vibecoding 难度</span>
+              <span class="score-value">${s.vibecoding_ease}/3</span>
             </div>
-            <div class="score-micro-bar"><div class="fill vibe" style="width:${(s.vibecoding_ease/3)*100}%"></div></div>
-            <p class="score-reason-mini">${escapeHtml(p.score_reasons.vibecoding_ease)}</p>
+            <div class="score-progress-bar"><div class="progress-fill vibe" style="width:${(s.vibecoding_ease/3)*100}%"></div></div>
+            <p class="score-reason-text">${escapeHtml(p.score_reasons.vibecoding_ease)}</p>
           </div>
 
-          <div class="score-box">
-            <div class="score-box-header">
-              <span>护城河</span>
-              <strong>${s.logic_moat}/3</strong>
+          <div class="score-row">
+            <div class="score-row-header">
+              <span class="score-name">逻辑护城河</span>
+              <span class="score-value">${s.logic_moat}/3</span>
             </div>
-            <div class="score-micro-bar"><div class="fill moat" style="width:${(s.logic_moat/3)*100}%"></div></div>
-            <p class="score-reason-mini">${escapeHtml(p.score_reasons.logic_moat)}</p>
+            <div class="score-progress-bar"><div class="progress-fill moat" style="width:${(s.logic_moat/3)*100}%"></div></div>
+            <p class="score-reason-text">${escapeHtml(p.score_reasons.logic_moat)}</p>
           </div>
 
-          <div class="score-box">
-            <div class="score-box-header">
-              <span>赛道</span>
-              <strong>${s.track_fit}/2</strong>
+          <div class="score-row">
+            <div class="score-row-header">
+              <span class="score-name">赛道匹配度</span>
+              <span class="score-value">${s.track_fit}/2</span>
             </div>
-            <div class="score-micro-bar"><div class="fill track" style="width:${(s.track_fit/2)*100}%"></div></div>
-            <p class="score-reason-mini">${escapeHtml(p.score_reasons.track_fit)}</p>
+            <div class="score-progress-bar"><div class="progress-fill track" style="width:${(s.track_fit/2)*100}%"></div></div>
+            <p class="score-reason-text">${escapeHtml(p.score_reasons.track_fit)}</p>
           </div>
 
-          <div class="score-box">
-            <div class="score-box-header">
-              <span>增长</span>
-              <strong>${s.growth_potential}/2</strong>
+          <div class="score-row">
+            <div class="score-row-header">
+              <span class="score-name">增长潜力</span>
+              <span class="score-value">${s.growth_potential}/2</span>
             </div>
-            <div class="score-micro-bar"><div class="fill growth" style="width:${(s.growth_potential/2)*100}%"></div></div>
-            <p class="score-reason-mini">${escapeHtml(p.score_reasons.growth_potential)}</p>
+            <div class="score-progress-bar"><div class="progress-fill growth" style="width:${(s.growth_potential/2)*100}%"></div></div>
+            <p class="score-reason-text">${escapeHtml(p.score_reasons.growth_potential)}</p>
           </div>
         </div>
       </div>
