@@ -52,38 +52,45 @@ def fetch_repo_topics(owner: str, repo: str) -> List[str]:
         return []
 
 def generate_chinese_summary(title: str, description: str, topics: list, readme: str = "") -> dict:
-    """生成详细的中文简介和比喻"""
+    """生成纯中文的项目简介和比喻（不使用英文原文）"""
     desc_lower = (description or "").lower()
     name_lower = title.lower()
     
-    # 判断项目类型
+    # 判断项目类型，生成纯中文描述
     if any(kw in desc_lower or kw in name_lower for kw in ["ai", "llm", "gpt", "claude", "agent", "machine learning", "deep learning"]):
         category = "AI/机器学习"
-        metaphor = f"💡 它就像你的「智能助手」——{description or '能够理解和处理复杂任务，让繁琐的工作变得简单高效'}"
+        detailed_description = "这是一个 AI 相关的开源项目。它利用人工智能技术，帮助用户自动化处理复杂任务，提升工作效率。可以应用于智能对话、内容生成、数据分析等场景。"
+        metaphor = "💡 它就像你的「智能助手」——你告诉它要做什么，它就能理解并帮你完成，就像一个24小时在线的得力帮手。"
         usage = "适合想用 AI 提升效率的开发者，或者想快速搭建智能应用的创业者"
     elif any(kw in desc_lower for kw in ["web", "flask", "django", "fastapi", "server"]):
         category = "Web开发"
-        metaphor = f"💡 它就像「乐高积木」——{description or '提供标准化的模块，让你快速搭建自己想要的网站'}"
+        detailed_description = "这是一个 Web 开发相关项目。提供网站或 Web 服务开发所需的框架、库或工具，帮助开发者快速搭建互联网应用。"
+        metaphor = "💡 它就像「乐高积木」——提供标准化的模块和接口，让你像搭积木一样快速搭建自己想要的网站或应用。"
         usage = "适合想快速搭建网站、API 服务的开发者"
     elif any(kw in desc_lower for kw in ["data", "pandas", "numpy", "analysis", "visualization"]):
         category = "数据分析"
-        metaphor = f"💡 它就像「数据翻译官」——{description or '把晦涩难懂的原始数据，转化成一目了然的图表和结论'}"
+        detailed_description = "这是一个数据处理工具。帮你分析、处理和可视化数据，将复杂的原始数据转化为易懂的图表和结论，适合数据分析需求。"
+        metaphor = "💡 它就像「数据翻译官」——把晦涩难懂的原始数据，翻译成一目了然的图表和结论，让数据会说话。"
         usage = "适合需要处理数据、做数据分析的人，比如运营、产品经理"
     elif any(kw in desc_lower for kw in ["automation", "bot", "scraping", "crawler", "schedule"]):
         category = "自动化工具"
-        metaphor = f"💡 它就像「自动洗衣机」——{description or '你把任务丢进去，它就自动帮你搞定，不用你盯着'}"
+        detailed_description = "这是一个自动化工具项目。它能够帮你自动完成重复性工作，比如定时任务、数据抓取、流程自动化等，节省大量手动操作时间。"
+        metaphor = "💡 它就像「自动洗衣机」——你把任务丢进去，设定好程序，它自动帮你完成，你完全不用盯着。"
         usage = "适合想节省时间、让电脑帮你干活的人，处理重复性任务"
     elif any(kw in desc_lower for kw in ["cli", "command", "terminal", "shell", "tool"]):
         category = "命令行工具"
-        metaphor = f"💡 它就像「瑞士军刀」——{description or '小巧但功能强大，程序员必备的工具箱'}"
+        detailed_description = "这是一个命令行工具。通过终端命令就能快速使用，适合程序员和开发者提高工作效率，通常体积小巧但功能强大。"
+        metaphor = "💡 它就像「瑞士军刀」——小巧便携，但集成了多种实用功能，是程序员工具箱里的必备利器。"
         usage = "适合程序员和开发者，喜欢用命令行提高效率的人"
     elif any(kw in desc_lower for kw in ["game", "gaming"]):
         category = "游戏开发"
-        metaphor = f"💡 它就像「游戏引擎」——{description or '提供基础框架，让你专注于创造游戏内容'}"
+        detailed_description = "这是一个游戏开发相关项目。提供游戏开发所需的引擎、框架或工具，帮助开发者快速构建游戏应用。"
+        metaphor = "💡 它就像「游戏引擎」——提供基础框架和工具，让你专注于创造游戏内容，不用从零开始造轮子。"
         usage = "适合游戏开发者和想制作游戏的人"
     else:
         category = "开发工具"
-        metaphor = f"💡 它就像「万能扳手」——{description or '虽然不是最耀眼的工具，但能帮你解决很多实际问题'}"
+        detailed_description = "这是一个 Python 开源项目。解决特定的开发需求或提供实用功能，可以根据具体场景灵活使用。"
+        metaphor = "💡 它就像「万能扳手」——虽然不是最耀眼的工具，但能帮你解决很多实际问题，是开发者的好帮手。"
         usage = "适合有特定需求的开发者，可以灵活使用"
     
     # 提取核心功能
@@ -103,14 +110,6 @@ def generate_chinese_summary(title: str, description: str, topics: list, readme:
     
     if topics:
         summary += f"，主要涉及 {', '.join(topics[:3])} 等技术"
-    
-    # 详细描述
-    detailed_description = f"这是一个 {category} 类型的开源项目。"
-    if description:
-        detailed_description += f"\n\n简单来说，它{description}。"
-    
-    detailed_description += f"\n\n{metaphor}"
-    detailed_description += f"\n\n🎯 适合谁用：{usage}。"
     
     return {
         "summary": summary,

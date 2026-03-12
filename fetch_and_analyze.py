@@ -67,12 +67,12 @@ def fetch_repo_readme(owner: str, repo: str) -> str:
         return ""
 
 def generate_detailed_description(repo_data: Dict, readme: str) -> tuple:
-    """生成详细的项目描述和通俗比喻"""
+    """生成详细的中文项目描述和通俗比喻（不使用英文原文）"""
     name = repo_data.get("name", "")
     description = repo_data.get("description", "") or ""
     full_name = repo_data.get("full_name", "")
     
-    # 根据项目类型生成描述
+    # 根据项目类型生成中文描述（不依赖英文 description）
     desc_lower = description.lower()
     name_lower = name.lower()
     
@@ -83,25 +83,25 @@ def generate_detailed_description(repo_data: Dict, readme: str) -> tuple:
     is_web = any(kw in desc_lower for kw in ["web", "flask", "django", "fastapi", "server", "api"])
     is_data = any(kw in desc_lower for kw in ["data", "pandas", "numpy", "analysis", "chart", "visual"])
     
-    # 生成通俗描述（详细版）
+    # 生成纯中文描述（不使用英文原文）
     if is_ai:
-        detailed_desc = f"这是一个 AI 相关的开源项目。简单来说，它{description or '利用人工智能技术解决特定问题'}。"
-        metaphor = f"💡 它就像你的「智能助手」——{description or '能够理解和处理复杂任务，让繁琐的工作变得简单高效'}。"
+        detailed_desc = "这是一个 AI 相关的开源项目。它利用人工智能技术，帮助用户自动化处理复杂任务，提升工作效率。可以应用于智能对话、内容生成、数据分析等场景。"
+        metaphor = "💡 它就像你的「智能助手」——你告诉它要做什么，它就能理解并帮你完成，就像一个24小时在线的得力帮手。"
     elif is_automation:
-        detailed_desc = f"这是一个自动化工具项目。{description or '它能够帮你自动完成重复性工作，节省时间'}。"
-        metaphor = f"💡 它就像「自动洗衣机」——{description or '你把任务丢进去，它就自动帮你搞定，不用你盯着'}。"
+        detailed_desc = "这是一个自动化工具项目。它能够帮你自动完成重复性工作，比如定时任务、数据抓取、流程自动化等，节省大量手动操作时间。"
+        metaphor = "💡 它就像「自动洗衣机」——你把脏衣服丢进去，设定好程序，它自动帮你洗干净，你完全不用盯着。"
     elif is_cli:
-        detailed_desc = f"这是一个命令行工具。{description or '通过终端命令就能使用的实用工具'}。"
-        metaphor = f"💡 它就像「瑞士军刀」——{description or '小巧但功能强大，程序员必备的工具箱'}。"
+        detailed_desc = "这是一个命令行工具。通过终端命令就能快速使用，适合程序员和开发者提高工作效率，通常体积小巧但功能强大。"
+        metaphor = "💡 它就像「瑞士军刀」——小巧便携，但集成了多种实用功能，是程序员工具箱里的必备利器。"
     elif is_web:
-        detailed_desc = f"这是一个 Web 开发相关项目。{description or '用于构建网站或 Web 服务'}。"
-        metaphor = f"💡 它就像「乐高积木」——{description or '提供标准化的模块，让你快速搭建自己想要的网站'}。"
+        detailed_desc = "这是一个 Web 开发相关项目。提供网站或 Web 服务开发所需的框架、库或工具，帮助开发者快速搭建互联网应用。"
+        metaphor = "💡 它就像「乐高积木」——提供标准化的模块和接口，让你像搭积木一样快速搭建自己想要的网站或应用。"
     elif is_data:
-        detailed_desc = f"这是一个数据处理工具。{description or '帮你分析和可视化数据'}。"
-        metaphor = f"💡 它就像「数据翻译官」——{description or '把晦涩难懂的原始数据，转化成一目了然的图表和结论'}。"
+        detailed_desc = "这是一个数据处理工具。帮你分析、处理和可视化数据，将复杂的原始数据转化为易懂的图表和结论，适合数据分析需求。"
+        metaphor = "💡 它就像「数据翻译官」——把晦涩难懂的原始数据，翻译成一目了然的图表和结论，让数据会说话。"
     else:
-        detailed_desc = f"这是一个 Python 开源项目。{description or '解决特定的开发需求'}。"
-        metaphor = f"💡 它就像「万能扳手」——{description or '虽然不是最耀眼的工具，但能帮你解决很多实际问题'}。"
+        detailed_desc = "这是一个 Python 开源项目。解决特定的开发需求或提供实用功能，可以根据具体场景灵活使用。"
+        metaphor = "💡 它就像「万能扳手」——虽然不是最耀眼的工具，但能帮你解决很多实际问题，是开发者的好帮手。"
     
     # 添加使用场景
     if is_ai:
