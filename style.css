@@ -1650,35 +1650,20 @@ body.modal-open {
 .scores-vertical-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   flex: 1;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.scores-vertical-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.scores-vertical-list::-webkit-scrollbar-track {
-  background: var(--border);
-  border-radius: 2px;
-}
-
-.scores-vertical-list::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: 2px;
+  overflow: visible;
 }
 
 .score-row {
   background: var(--bg-card);
-  padding: 12px 14px;
+  padding: 10px 14px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  flex-shrink: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .score-row-header {
@@ -1742,12 +1727,17 @@ body.modal-open {
   font-size: 13px;
 }
 
-/* Fixed modal size */
+/* Fixed modal size - enlarged for full display */
 .modal {
-  width: 900px;
-  height: 600px;
+  width: 1000px;
+  height: 700px;
   max-width: 95vw;
   max-height: 90vh;
+}
+
+/* Adjust two column layout for larger modal */
+.modal-body-two-col {
+  height: calc(700px - 120px);
 }
 
 .modal-content {
@@ -1826,4 +1816,16 @@ th.sortable.active.asc::after {
 
 .modal-title-link h2 {
   display: inline;
+}
+
+/* ===== STARS GROWTH ===== */
+.stars-growth {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.stars-growth.positive {
+  color: var(--green);
+  font-weight: 600;
 }

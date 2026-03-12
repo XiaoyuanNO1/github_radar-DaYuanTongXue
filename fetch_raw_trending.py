@@ -119,12 +119,26 @@ def generate_chinese_summary(title: str, description: str, topics: list, readme:
         "usage": usage
     }
 
+def load_previous_stars(filepath: str) -> Dict[str, int]:
+    """加载前一天的 stars 数据"""
+    if not os.path.exists(filepath):
+        return {}
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return {p["title"]: p.get("stars", 0) for p in data.get("projects", [])}
+    except:
+        return {}
+
 def main():
     today = datetime.now().strftime("%Y-%m-%d")
     print(f"📅 今日日期: {today}")
     
     project_dir = os.path.dirname(os.path.abspath(__file__))
     raw_data_file = os.path.join(project_dir, "raw_trending.json")
+    
+    # 加载前一天的 stars 数据
+    previous_stars = load_previous_stars(raw_data_file)
     
     print("🔍 获取 GitHub Python 趋势项目（原始数据）...")
     repos = fetch_trending_repos(count=30)
@@ -149,6 +163,10 @@ def main():
         raw_desc = repo.get("description", "") or "暂无描述"
         analysis = generate_chinese_summary(name, raw_desc, topics)
         
+        current_stars = repo.get("stargazers_count", 0)
+        prev_stars = previous_stars.get(f"{owner} / {name}", current_stars)
+        stars_growth = current_stars - prev_stars
+        
         entry = {
             "rank": i,
             "date": today,
@@ -160,7 +178,8 @@ def main():
             "metaphor": analysis["metaphor"],
             "category": analysis["category"],
             "usage": analysis["usage"],
-            "stars": repo.get("stargazers_count", 0),
+            "stars": current_stars,
+            "stars_growth": stars_growth,
             "forks": repo.get("forks_count", 0),
             "language": repo.get("language", ""),
             "topics": topics,
@@ -169,7 +188,13 @@ def main():
             "homepage": repo.get("homepage", "")
         }
         raw_entries.append(entry)
-        print(f"⭐ {entry['stars']}")
+        print(f"⭐ {current_stars} (+{stars_growth})")
+    
+    # 按 stars 增量排序
+    raw_entries.sort(key=lambda x: x["stars_growth"], reverse=True)
+    # 更新 rank
+    for i, entry in enumerate(raw_entries, 1):
+        entry["rank"] = i
     
     # 保存原始数据
     with open(raw_data_file, 'w', encoding='utf-8') as f:

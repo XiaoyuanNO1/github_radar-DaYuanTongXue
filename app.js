@@ -323,7 +323,7 @@ function renderRawList() {
             <a href="${p.url}" target="_blank" onclick="event.stopPropagation()">${escapeHtml(p.title)}</a>
           </h3>
           <div class="raw-stats">
-            <span class="raw-stars">⭐ ${p.stars}</span>
+            <span class="raw-stars">⭐ ${p.stars} <span class="stars-growth${p.stars_growth > 0 ? ' positive' : ''}">+${p.stars_growth || 0}</span></span>
             <span class="raw-forks">🍴 ${p.forks}</span>
             ${p.language ? `<span class="raw-lang">📦 ${p.language}</span>` : ''}
           </div>
