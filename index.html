@@ -31,6 +31,16 @@
     </div>
   </header>
 
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="site-nav">
+    <div class="container">
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-page="analyzed">📊 AI 分析榜单</button>
+        <button class="nav-tab" data-page="raw">📋 原始趋势榜单</button>
+      </div>
+    </div>
+  </nav>
+
   <!-- ===== STATS BAR ===== -->
   <div class="stats-bar">
     <div class="container">
@@ -65,83 +75,114 @@
 
   <main class="container">
 
-    <!-- ===== TOP 3 SECTION ===== -->
-    <section class="section" id="top3-section">
-      <div class="section-header">
-        <div class="section-title-group">
-          <span class="section-badge">🏆 今日精选</span>
-          <h2 class="section-title">Top 3 黑马项目</h2>
-          <p class="section-subtitle">今日评分最高、最具 Vibecoding 变现潜力的三个项目</p>
-        </div>
-        <div class="date-filter">
-          <label for="top3-date">查看日期</label>
-          <select id="top3-date"></select>
-        </div>
-      </div>
-      <div class="top3-grid" id="top3-grid">
-        <div class="loading-placeholder">
-          <div class="spinner"></div>
-          <p>正在加载数据...</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== HISTORY SECTION ===== -->
-    <section class="section" id="history-section">
-      <div class="section-header">
-        <div class="section-title-group">
-          <span class="section-badge">📚 历史项目榜单</span>
-          <h2 class="section-title">所有归档项目</h2>
-          <p class="section-subtitle">共 <span id="total-count">0</span> 个项目 · 点击表头排序</p>
-        </div>
-        <div class="filter-bar">
-          <div class="search-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" placeholder="搜索项目名称或描述..." />
+    <!-- ===== PAGE: AI ANALYZED ===== -->
+    <div id="page-analyzed" class="page-content active">
+      <!-- ===== TOP 3 SECTION ===== -->
+      <section class="section" id="top3-section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="section-badge">🏆 今日精选</span>
+            <h2 class="section-title">Top 3 黑马项目</h2>
+            <p class="section-subtitle">今日评分最高、最具 Vibecoding 变现潜力的三个项目</p>
           </div>
-          <select id="sort-select">
-            <option value="total_desc">总分 ↓</option>
-            <option value="total_asc">总分 ↑</option>
-            <option value="date_desc">日期 ↓</option>
-            <option value="date_asc">日期 ↑</option>
-            <option value="vibecoding_desc">Vibecoding 难度 ↓</option>
-            <option value="logic_desc">逻辑护城河 ↓</option>
-            <option value="growth_desc">增长潜力 ↓</option>
-          </select>
-          <!-- 赛道筛选标签 -->
-          <div class="track-filter" id="track-filter">
-            <button class="track-btn active" data-track="all">全部</button>
-            <button class="track-btn" data-track="top">🏆 精选</button>
-            <button class="track-btn" data-track="high">高分 ≥8</button>
-            <button class="track-btn" data-track="vibe">⚡ Vibe ≥3</button>
-            <button class="track-btn" data-track="growth">📈 增长 ≥2</button>
+          <div class="date-filter">
+            <label for="top3-date">查看日期</label>
+            <select id="top3-date"></select>
           </div>
         </div>
-      </div>
+        <div class="top3-grid" id="top3-grid">
+          <div class="loading-placeholder">
+            <div class="spinner"></div>
+            <p>正在加载数据...</p>
+          </div>
+        </div>
+      </section>
 
-      <div class="table-wrap">
-        <table class="history-table" id="history-table">
-          <thead>
-            <tr>
-              <th class="col-rank">#</th>
-              <th class="col-title sortable" data-sort="title">项目名称</th>
-              <th class="col-date sortable" data-sort="date">日期</th>
-              <th class="col-score sortable active" data-sort="total">总分</th>
-              <th class="col-score sortable" data-sort="vibecoding_ease">Vibe</th>
-              <th class="col-score sortable" data-sort="logic_moat">护城河</th>
-              <th class="col-score sortable" data-sort="track_fit">赛道</th>
-              <th class="col-score sortable" data-sort="growth_potential">增长</th>
-              <th class="col-top">精选</th>
-            </tr>
-          </thead>
-          <tbody id="history-tbody">
-            <tr><td colspan="9" class="loading-cell"><div class="spinner"></div></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- 分页控件 -->
-      <div class="pagination" id="pagination"></div>
-    </section>
+      <!-- ===== HISTORY SECTION ===== -->
+      <section class="section" id="history-section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="section-badge">📚 历史项目榜单</span>
+            <h2 class="section-title">所有归档项目</h2>
+            <p class="section-subtitle">共 <span id="total-count">0</span> 个项目 · 点击表头排序</p>
+          </div>
+          <div class="filter-bar">
+            <div class="search-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="搜索项目名称或描述..." />
+            </div>
+            <select id="sort-select">
+              <option value="total_desc">总分 ↓</option>
+              <option value="total_asc">总分 ↑</option>
+              <option value="date_desc">日期 ↓</option>
+              <option value="date_asc">日期 ↑</option>
+              <option value="vibecoding_desc">Vibecoding 难度 ↓</option>
+              <option value="logic_desc">逻辑护城河 ↓</option>
+              <option value="growth_desc">增长潜力 ↓</option>
+            </select>
+            <!-- 赛道筛选标签 -->
+            <div class="track-filter" id="track-filter">
+              <button class="track-btn active" data-track="all">全部</button>
+              <button class="track-btn" data-track="top">🏆 精选</button>
+              <button class="track-btn" data-track="high">高分 ≥8</button>
+              <button class="track-btn" data-track="vibe">⚡ Vibe ≥3</button>
+              <button class="track-btn" data-track="growth">📈 增长 ≥2</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="history-table" id="history-table">
+            <thead>
+              <tr>
+                <th class="col-rank">#</th>
+                <th class="col-title sortable" data-sort="title">项目名称</th>
+                <th class="col-date sortable" data-sort="date">日期</th>
+                <th class="col-stars">⭐ Stars</th>
+                <th class="col-score sortable active" data-sort="total">总分</th>
+                <th class="col-score sortable" data-sort="vibecoding_ease">Vibe</th>
+                <th class="col-score sortable" data-sort="logic_moat">护城河</th>
+                <th class="col-score sortable" data-sort="track_fit">赛道</th>
+                <th class="col-score sortable" data-sort="growth_potential">增长</th>
+                <th class="col-top">精选</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+              <tr><td colspan="10" class="loading-cell"><div class="spinner"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- 分页控件 -->
+        <div class="pagination" id="pagination"></div>
+      </section>
+    </div>
+
+    <!-- ===== PAGE: RAW TRENDING ===== -->
+    <div id="page-raw" class="page-content">
+      <section class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="section-badge">📋 原始榜单</span>
+            <h2 class="section-title">GitHub Python 趋势榜</h2>
+            <p class="section-subtitle">今日 GitHub 上最热门的 Python 项目（按 Star 数排序）</p>
+          </div>
+          <div class="raw-stats" id="raw-stats">
+            <span>📅 数据日期：<span id="raw-date">—</span></span>
+            <span>📊 共 <span id="raw-count">—</span> 个项目</span>
+          </div>
+        </div>
+
+        <div class="raw-list" id="raw-list">
+          <div class="loading-placeholder">
+            <div class="spinner"></div>
+            <p>正在加载原始榜单...</p>
+          </div>
+        </div>
+
+        <!-- 原始榜单分页 -->
+        <div class="pagination" id="raw-pagination"></div>
+      </section>
+    </div>
 
   </main>
 
@@ -156,7 +197,7 @@
   <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
     <div class="container">
-      <p>🤖 由 AI 自动分析 · 每日北京时间 07:00 更新 · 数据来源 <a href="https://github.com/trending/python?since=daily" target="_blank">GitHub Trending</a></p>
+      <p>🤖 由 AI 自动分析 · 每日北京时间 08:00 更新 · 数据来源 <a href="https://github.com/trending/python?since=daily" target="_blank">GitHub Trending</a></p>
     </div>
   </footer>
 

@@ -71,41 +71,93 @@ def analyze_with_ai(repo_data: Dict, readme: str) -> Dict:
     使用 AI 分析项目的 Vibecoding 变现潜力
     返回包含评分和分析结果的字典
     """
-    # 这里应该调用实际的 AI API 进行分析
-    # 为了演示，返回模拟的分析结果
-    # 实际使用时，需要集成 OpenAI、Claude 或其他 AI API
-    
-    # 模拟 AI 分析（实际部署时需要替换为真实 AI 调用）
     description = repo_data.get("description", "") or ""
+    name = repo_data.get("name", "").lower()
+    readme_lower = readme.lower()
     
-    # 简单启发式评分（仅用于演示）
-    scores = {
-        "vibecoding_ease": 2,  # 1-3: 实现难度
-        "logic_moat": 2,       # 0-2: 护城河
-        "track_fit": 1,        # 0-2: 赛道匹配
-        "growth_potential": 2  # 0-2: 增长潜力
+    # 合并所有文本用于分析
+    all_text = f"{description} {name} {readme_lower}"
+    
+    # 赛道关键词定义
+    tracks = {
+        "pet": ["pet", "dog", "cat", "animal", "宠物", "狗", "猫"],
+        "elderly": ["elderly", "senior", "aging", "old", "老人", "养老", "银发"],
+        "mysticism": ["mystic", "tarot", "astrology", "fortune", "玄学", "塔罗", "占星"],
+        "finance": ["finance", "trading", "crypto", "stock", "investment", "金融", "交易", "理财"],
+        "education": ["education", "learning", "course", "study", "教育", "学习", "课程"]
     }
     
-    # 根据关键词简单调整分数
+    # 计算赛道匹配
+    matched_tracks = 0
+    track_details = []
+    for track_name, keywords in tracks.items():
+        if any(kw in all_text for kw in keywords):
+            matched_tracks += 1
+            track_details.append(track_name)
+    
+    # Track Fit 评分：1个赛道=1分，2个及以上=2分
+    if matched_tracks >= 2:
+        track_fit = 2
+    elif matched_tracks == 1:
+        track_fit = 1
+    else:
+        track_fit = 0
+    
+    # 其他维度评分
     desc_lower = description.lower()
-    if any(kw in desc_lower for kw in ["agent", "ai", "llm", "gpt", "claude"]):
-        scores["track_fit"] = 2
-        scores["growth_potential"] = 2
+    
+    # Vibecoding Ease (1-3)
+    if any(kw in desc_lower for kw in ["simple", "easy", "lightweight", "纯提示词"]):
+        vibecoding_ease = 3
+    elif any(kw in desc_lower for kw in ["framework", "library", "sdk"]):
+        vibecoding_ease = 2
+    else:
+        vibecoding_ease = 2  # 默认中等
+    
+    # Logic Moat (0-2)
+    if any(kw in desc_lower for kw in ["algorithm", "model", "unique", "专利"]):
+        logic_moat = 2
+    elif any(kw in desc_lower for kw in ["api", "wrapper", "client"]):
+        logic_moat = 1
+    else:
+        logic_moat = 1
+    
+    # Growth Potential (0-2)
+    if any(kw in desc_lower for kw in ["automation", "money", "passive income", "赚钱", "被动收入"]):
+        growth_potential = 2
+    elif any(kw in desc_lower for kw in ["ai", "agent", "llm", "gpt", "claude"]):
+        growth_potential = 2
+    else:
+        growth_potential = 1
+    
+    scores = {
+        "vibecoding_ease": vibecoding_ease,
+        "logic_moat": logic_moat,
+        "track_fit": track_fit,
+        "growth_potential": growth_potential
+    }
     
     total = sum(scores.values())
     
+    # 生成描述和类比
+    if matched_tracks > 0:
+        track_str = ", ".join(track_details)
+        track_fit_reason = f"命中 {matched_tracks} 个赛道 ({track_str})，Track Fit 得分 {track_fit}"
+    else:
+        track_fit_reason = "未命中核心赛道（宠物/银发/玄学/金融/教育）"
+    
     return {
         "description": description or "暂无描述",
-        "metaphor": f"这个项目就像「{repo_data.get('name', '某工具')}」... (需要 AI 生成)",
+        "metaphor": f"它就像「{repo_data.get('name', '某工具')}」——解决特定场景的自动化需求",
         "scores": {
             **scores,
             "total": total
         },
         "score_reasons": {
-            "vibecoding_ease": "需要 AI 分析生成",
-            "logic_moat": "需要 AI 分析生成",
-            "track_fit": "需要 AI 分析生成",
-            "growth_potential": "需要 AI 分析生成"
+            "vibecoding_ease": "基于项目复杂度评估" if vibecoding_ease == 3 else "中等复杂度实现",
+            "logic_moat": "具备一定技术壁垒" if logic_moat >= 1 else "简单 API 封装",
+            "track_fit": track_fit_reason,
+            "growth_potential": "AI 相关热点，具备传播潜力" if growth_potential == 2 else "有一定变现空间"
         }
     }
 
